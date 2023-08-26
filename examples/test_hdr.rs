@@ -2,7 +2,7 @@ use macroquad::prelude::*;
 
 #[macroquad::main("Post processing")]
 async fn main() {
-    let render_target_t = render_target_with_format(320, 150,miniquad::TextureFormat::RGB8);
+    let render_target_t = render_target_with_format(320, 150,miniquad::TextureFormat::RGBA16);
     //let render_target_t = render_target(320,150);
     render_target_t.texture.set_filter(FilterMode::Nearest);
 
@@ -26,6 +26,7 @@ async fn main() {
             ..Default::default()
         });
 
+        //clear_background(Color::new(2., 2., 2., 1.));
         clear_background(WHITE);
         draw_line(-30.0, 45.0, 30.0, 45.0, 3.0, BLUE);
         draw_circle(-45.0, -35.0, 20.0, YELLOW);
@@ -37,17 +38,17 @@ async fn main() {
         
         clear_background(WHITE);
         draw_texture(&render_target_t.texture, 0., 0., WHITE);
-        // gl_use_material(&material);
-        // draw_texture_ex(
-        //     &render_target_t.texture,
-        //     0.,
-        //     0.,
-        //     WHITE,
-        //     DrawTextureParams {
-        //         dest_size: Some(vec2(screen_width(), screen_height())),
-        //         ..Default::default()
-        //     },
-        // );
+        gl_use_material(&material);
+        draw_texture_ex(
+            &render_target_t.texture,
+            0.,
+            0.,
+            WHITE,
+            DrawTextureParams {
+                dest_size: Some(vec2(screen_width(), screen_height())),
+                ..Default::default()
+            },
+        );
         gl_use_default_material();
 
         next_frame().await;
@@ -66,10 +67,10 @@ uniform sampler2D Texture;
 void main() {
     vec3 res = texture2D(Texture, uv).rgb;
  	
-    // if (res.x < 1.0 && res.y < 1.0 && res.z < 1.0)
-    // {
-    //     res = vec3(0.0, 0.0, 0.0);
-    // } 
+    if (res.x < 1.01 && res.y < 1.01 && res.z < 1.01)
+    {
+        res = vec3(0.0, 0.0, 0.0);
+    } 
     gl_FragColor = vec4(res, 1.0);
 
 }
