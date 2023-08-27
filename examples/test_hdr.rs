@@ -26,8 +26,7 @@ async fn main() {
             ..Default::default()
         });
 
-        //clear_background(Color::new(2., 2., 2., 1.));
-        clear_background(WHITE);
+        clear_background(Color::new(2., 1.5, 1., 1.));
         draw_line(-30.0, 45.0, 30.0, 45.0, 3.0, BLUE);
         draw_circle(-45.0, -35.0, 20.0, YELLOW);
         draw_circle(45.0, -35.0, 20.0, GREEN);
@@ -35,7 +34,7 @@ async fn main() {
         // drawing to the screen
 
         set_default_camera();
-        
+
         clear_background(WHITE);
         draw_texture(&render_target_t.texture, 0., 0., WHITE);
         gl_use_material(&material);
@@ -66,13 +65,8 @@ uniform sampler2D Texture;
 
 void main() {
     vec3 res = texture2D(Texture, uv).rgb;
- 	
-    if (res.x < 1.01 && res.y < 1.01 && res.z < 1.01)
-    {
-        res = vec3(0.0, 0.0, 0.0);
-    } 
+    res -= vec3(1.0,1.0,1.0);
     gl_FragColor = vec4(res, 1.0);
-
 }
 "#;
 
