@@ -2,7 +2,14 @@ use macroquad::prelude::*;
 
 #[macroquad::main("Post processing")]
 async fn main() {
-    let render_target_t = render_target_with_format(320, 150,miniquad::TextureFormat::RGBA16);
+    let context = unsafe { get_internal_gl() };
+
+    let render_target_t = render_target_with_format(
+        320,
+        150,
+        miniquad::TextureFormat::rgba16(context.quad_context)
+            .expect("Not running in a context with support for RGBA16F textures"),
+    );
     //let render_target_t = render_target(320,150);
     render_target_t.texture.set_filter(FilterMode::Nearest);
 
@@ -51,8 +58,7 @@ async fn main() {
         gl_use_default_material();
 
         next_frame().await;
-        
-     }
+    }
 }
 
 const CRT_FRAGMENT_SHADER: &str = r#"#version 100

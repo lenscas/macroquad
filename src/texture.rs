@@ -270,7 +270,7 @@ impl RenderTarget {
     }
 }
 
-pub fn render_target(width: u32,height: u32) -> RenderTarget {
+pub fn render_target(width: u32, height: u32) -> RenderTarget {
     render_target_with_format(width, height, TextureParams::default().format)
 }
 
@@ -656,8 +656,7 @@ impl Texture2D {
             _ => unimplemented!(),
         };
         let internal_format = match params.format {
-            #[cfg(feature="opengl3")]
-            TextureFormat::RGBA16 => miniquad::gl::GL_RGBA16F,
+            TextureFormat::RGBA16(_) => miniquad::gl::GL_RGBA16F,
             TextureFormat::RGB8 => miniquad::gl::GL_RGB,
             TextureFormat::RGBA8 => miniquad::gl::GL_RGBA,
             TextureFormat::Depth => miniquad::gl::GL_DEPTH_COMPONENT,
